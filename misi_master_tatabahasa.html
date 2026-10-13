@@ -1,0 +1,1949 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Misi Master Tatabahasa - KSSM Tingkatan 4</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        electric: '#2563eb',
+                        electricDark: '#1d4ed8',
+                        purpleCustom: '#7c3aed',
+                        goldCustom: '#f59e0b',
+                        accentGreen: '#10b981',
+                        darkNavy: '#0f172a'
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #1e293b 100%);
+            min-height: 100vh;
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+
+        .glass-card {
+            background: rgba(30, 41, 59, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-card-light {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-3d-blue {
+            background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%);
+            box-shadow: 0 6px 0 #1e40af, 0 10px 20px rgba(37, 99, 235, 0.4);
+            transition: all 0.15s ease;
+        }
+        .btn-3d-blue:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 0 #1e40af, 0 12px 24px rgba(37, 99, 235, 0.5);
+        }
+        .btn-3d-blue:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #1e40af, 0 4px 10px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-3d-purple {
+            background: linear-gradient(180deg, #8b5cf6 0%, #6d28d9 100%);
+            box-shadow: 0 6px 0 #5b21b6, 0 10px 20px rgba(139, 92, 246, 0.4);
+            transition: all 0.15s ease;
+        }
+        .btn-3d-purple:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 0 #5b21b6, 0 14px 28px rgba(139, 92, 246, 0.5);
+        }
+        .btn-3d-purple:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #5b21b6, 0 4px 10px rgba(139, 92, 246, 0.3);
+        }
+
+        .btn-3d-gold {
+            background: linear-gradient(180deg, #fbbf24 0%, #d97706 100%);
+            color: #1e1b4b;
+            box-shadow: 0 6px 0 #b45309, 0 10px 20px rgba(245, 158, 11, 0.4);
+            transition: all 0.15s ease;
+        }
+        .btn-3d-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 0 #b45309, 0 14px 28px rgba(245, 158, 11, 0.5);
+        }
+        .btn-3d-gold:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #b45309, 0 4px 10px rgba(245, 158, 11, 0.3);
+        }
+
+        .option-card {
+            background: rgba(30, 41, 59, 0.8);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease;
+        }
+        .option-card:hover {
+            border-color: #60a5fa;
+            background: rgba(37, 99, 235, 0.15);
+            transform: translateX(4px);
+        }
+
+        .option-card.correct {
+            background: rgba(16, 185, 129, 0.25) !important;
+            border-color: #10b981 !important;
+            color: #a7f3d0 !important;
+        }
+
+        .option-card.wrong {
+            background: rgba(239, 68, 68, 0.25) !important;
+            border-color: #ef4444 !important;
+            color: #fca5a5 !important;
+        }
+
+        .badge-locked {
+            filter: grayscale(100%) opacity(0.4);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.5);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.8);
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
+            50% { box-shadow: 0 0 30px rgba(139, 92, 246, 0.7); }
+        }
+
+        .glow-effect {
+            animation: pulseGlow 3s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="p-2 md:p-6 flex flex-col justify-between min-h-screen">
+
+    <!-- TOP HEADER / PLAYER STATS BAR -->
+    <header class="max-w-6xl mx-auto w-full mb-6">
+        <div class="glass-card rounded-2xl p-4 flex flex-wrap items-center justify-between gap-4">
+            <!-- Player Info -->
+            <div class="flex items-center space-x-3">
+                <div class="relative">
+                    <div id="playerAvatar" class="w-12 h-12 rounded-full bg-gradient-to-tr from-blue-500 to-purple-600 flex items-center justify-center text-xl font-bold border-2 border-amber-400 shadow-lg text-white">
+                        <i class="fa-solid fa-user-ninja"></i>
+                    </div>
+                    <span class="absolute -bottom-1 -right-1 bg-amber-400 text-slate-900 text-xs font-black px-1.5 py-0.5 rounded-full shadow">T4</span>
+                </div>
+                <div>
+                    <h3 id="playerNameDisplay" class="font-bold text-base md:text-lg text-white flex items-center gap-2">
+                        Murid Cemerlang SPM
+                        <button onclick="editPlayerName()" class="text-xs text-blue-400 hover:text-blue-300"><i class="fa-solid fa-pen"></i></button>
+                    </h3>
+                    <p class="text-xs text-amber-300 flex items-center gap-1.5 font-medium">
+                        <i class="fa-solid fa-crown"></i> <span id="playerRankTitle">Pengembara Bahasa</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="flex items-center gap-3 md:gap-6 text-sm">
+                <!-- Total XP -->
+                <div class="flex items-center gap-2 bg-slate-800/80 px-3 py-1.5 rounded-xl border border-slate-700">
+                    <i class="fa-solid fa-bolt text-amber-400 text-base"></i>
+                    <div>
+                        <div class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Mata XP</div>
+                        <div id="topTotalXP" class="font-extrabold text-amber-400">0</div>
+                    </div>
+                </div>
+
+                <!-- Daily Streak -->
+                <div class="flex items-center gap-2 bg-slate-800/80 px-3 py-1.5 rounded-xl border border-slate-700">
+                    <i class="fa-solid fa-fire text-orange-500 text-base"></i>
+                    <div>
+                        <div class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Streak</div>
+                        <div id="topStreak" class="font-extrabold text-orange-400">0 Hari</div>
+                    </div>
+                </div>
+
+                <!-- Navigation Controls -->
+                <button onclick="showScreen('mainMenu')" class="p-2.5 rounded-xl bg-slate-700/60 hover:bg-slate-600 text-white transition title="Menu Utama"">
+                    <i class="fa-solid fa-house"></i>
+                </button>
+                <button onclick="toggleAudio()" id="audioToggleBtn" class="p-2.5 rounded-xl bg-slate-700/60 hover:bg-slate-600 text-white transition title="Mute/Unmute Audio"">
+                    <i class="fa-solid fa-volume-high"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER FOR VIEWS -->
+    <main class="max-w-6xl mx-auto w-full flex-grow flex flex-col justify-center my-auto">
+
+        <!-- ================= MAIN MENU SCREEN ================= -->
+        <section id="mainMenu" class="view-screen space-y-6">
+            <div class="glass-card rounded-3xl p-6 md:p-10 text-center relative overflow-hidden glow-effect">
+                <div class="absolute -top-24 -left-24 w-60 h-60 bg-blue-500/20 rounded-full blur-3xl"></div>
+                <div class="absolute -bottom-24 -right-24 w-60 h-60 bg-purple-500/20 rounded-full blur-3xl"></div>
+
+                <div class="relative z-10">
+                    <span class="inline-block px-4 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-xs font-bold uppercase tracking-widest mb-3">
+                        <i class="fa-solid fa-graduation-cap mr-1"></i> Modul KSSM Tingkatan 4 & SPM
+                    </span>
+                    <h1 class="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-300 to-amber-300 mb-3 tracking-tight">
+                        MISI MASTER TATABAHASA
+                    </h1>
+                    <p class="text-slate-300 text-sm md:text-lg max-w-2xl mx-auto font-medium">
+                        “Uji Minda, Kuasai Bahasa!” Pengembaraan interaktif terbaik untuk memantapkan pemahaman tatabahasa Bahasa Melayu KSSM SPM.
+                    </p>
+
+                    <!-- Quick Play Big Action -->
+                    <div class="mt-8 flex flex-wrap justify-center gap-4">
+                        <button onclick="startQuickGame()" class="btn-3d-gold px-8 py-4 rounded-2xl font-extrabold text-lg flex items-center gap-3">
+                            <i class="fa-solid fa-play text-xl"></i> MULA BERMAIN SEKARANG
+                        </button>
+                        <button onclick="showScreen('topicSelectScreen')" class="btn-3d-blue px-8 py-4 rounded-2xl font-extrabold text-lg flex items-center gap-3">
+                            <i class="fa-solid fa-list-check text-xl"></i> PILIH MISI
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Secondary Navigation Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <button onclick="startDailyChallenge()" class="glass-card hover:border-amber-400/50 p-5 rounded-2xl text-left transition duration-200 group flex items-start gap-4">
+                    <div class="p-3 bg-amber-500/20 rounded-xl text-amber-400 text-2xl group-hover:scale-110 transition">
+                        <i class="fa-solid fa-calendar-day"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg text-white group-hover:text-amber-300">Cabaran Harian</h4>
+                        <p class="text-xs text-slate-400 mt-1">Soalan pilihan harian dengan bonus ganjaran XP berganda!</p>
+                    </div>
+                </button>
+
+                <button onclick="showScreen('grammarGuideScreen')" class="glass-card hover:border-purple-400/50 p-5 rounded-2xl text-left transition duration-200 group flex items-start gap-4">
+                    <div class="p-3 bg-purple-500/20 rounded-xl text-purple-400 text-2xl group-hover:scale-110 transition">
+                        <i class="fa-solid fa-book-open"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg text-white group-hover:text-purple-300">Panduan Tatabahasa</h4>
+                        <p class="text-xs text-slate-400 mt-1">Nota ringkas & padat merangkumi semua topik KSSM T4.</p>
+                    </div>
+                </button>
+
+                <button onclick="showScreen('achievementsScreen')" class="glass-card hover:border-blue-400/50 p-5 rounded-2xl text-left transition duration-200 group flex items-start gap-4">
+                    <div class="p-3 bg-blue-500/20 rounded-xl text-blue-400 text-2xl group-hover:scale-110 transition">
+                        <i class="fa-solid fa-award"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg text-white group-hover:text-blue-300">Pencapaian & Lencana</h4>
+                        <p class="text-xs text-slate-400 mt-1">Lihat koleksi lencana dan rekod pencapaian anda.</p>
+                    </div>
+                </button>
+            </div>
+        </section>
+
+        <!-- ================= TOPIC / MISI SELECTION SCREEN ================= -->
+        <section id="topicSelectScreen" class="view-screen hidden space-y-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-compass text-amber-400"></i> Pilih Misi Tatabahasa
+                    </h2>
+                    <p class="text-slate-300 text-xs md:text-sm">Pilih mana-mana modul untuk memulakan latihan 10 soalan.</p>
+                </div>
+                <!-- Difficulty Filter Selector -->
+                <div class="flex items-center gap-2 bg-slate-800/90 p-1.5 rounded-xl border border-slate-700 text-xs">
+                    <span class="text-slate-400 font-semibold px-2">Tahap:</span>
+                    <button onclick="setDifficulty('Asas')" id="diffBtnAsas" class="diff-btn px-2.5 py-1 rounded-lg bg-blue-600 font-bold text-white">Asas</button>
+                    <button onclick="setDifficulty('Pertengahan')" id="diffBtnPertengahan" class="diff-btn px-2.5 py-1 rounded-lg hover:bg-slate-700 text-slate-300">Sederhana</button>
+                    <button onclick="setDifficulty('SPM')" id="diffBtnSPM" class="diff-btn px-2.5 py-1 rounded-lg hover:bg-slate-700 text-slate-300">Cabaran SPM</button>
+                </div>
+            </div>
+
+            <!-- Missions Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="missionsGrid">
+                <!-- Injected dynamically via JS -->
+            </div>
+        </section>
+
+        <!-- ================= GAMEPLAY SCREEN ================= -->
+        <section id="gameplayScreen" class="view-screen hidden space-y-5">
+            <!-- Question Header Progress Bar -->
+            <div class="glass-card rounded-2xl p-4 flex flex-col gap-3">
+                <div class="flex items-center justify-between text-xs md:text-sm font-bold">
+                    <span class="text-blue-300 flex items-center gap-2" id="currentMissionTag">
+                        <i class="fa-solid fa-bullseye"></i> Misi 1: Golongan Kata
+                    </span>
+                    <div class="flex items-center gap-4">
+                        <span class="text-slate-300">Soalan <span id="qIndexText" class="text-amber-400 text-base">1</span> / <span id="qTotalText">10</span></span>
+                        <span class="text-emerald-400 flex items-center gap-1"><i class="fa-solid fa-star"></i> <span id="liveScoreText">0</span> XP</span>
+                    </div>
+                </div>
+                <!-- Progress bar line -->
+                <div class="w-full bg-slate-700/80 rounded-full h-3 overflow-hidden p-0.5 border border-slate-600">
+                    <div id="gameProgressBar" class="bg-gradient-to-r from-blue-500 via-indigo-500 to-amber-400 h-full rounded-full transition-all duration-300" style="width: 10%;"></div>
+                </div>
+            </div>
+
+            <!-- Main Question Box -->
+            <div class="glass-card rounded-3xl p-6 md:p-8 space-y-6 relative">
+                <!-- Question Type Badge -->
+                <div class="flex items-center justify-between">
+                    <span id="questionCategoryBadge" class="px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 text-xs font-bold border border-purple-500/30">
+                        Pilihan Aneka
+                    </span>
+                    <div id="streakBonusBadge" class="hidden animate-bounce px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-black border border-amber-500/40">
+                        <i class="fa-solid fa-fire text-orange-400"></i> BONUS STREAK +5 XP!
+                    </div>
+                </div>
+
+                <!-- Context / Text Snippet (For Penyuntingan & Petikan) -->
+                <div id="questionContextBox" class="hidden p-4 rounded-2xl bg-slate-800/90 border border-slate-700/80 text-slate-200 text-sm leading-relaxed font-serif italic border-l-4 border-l-blue-500">
+                    <!-- Dynamic snippet content -->
+                </div>
+
+                <!-- Question Prompt -->
+                <h3 id="questionTitle" class="text-lg md:text-xl font-bold text-white leading-snug">
+                    Pilih kata adjektif yang sesuai untuk melengkapkan ayat berikut...
+                </h3>
+
+                <!-- Answer Options Grid -->
+                <div id="optionsContainer" class="grid grid-cols-1 gap-3.5">
+                    <!-- Option buttons generated dynamically -->
+                </div>
+            </div>
+
+            <!-- Instant Feedback Overlay Modal -->
+            <div id="feedbackBox" class="hidden glass-card rounded-2xl p-6 border-2 space-y-4 animate-fade-in">
+                <div class="flex items-center gap-3">
+                    <div id="feedbackIcon" class="w-10 h-10 rounded-full flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <div>
+                        <h4 id="feedbackTitle" class="font-extrabold text-base md:text-lg">TAHNIAH! JAWAPAN ANDA BETUL!</h4>
+                        <p id="feedbackSubtitle" class="text-xs text-slate-300">Penerangan Tatabahasa:</p>
+                    </div>
+                </div>
+
+                <div id="feedbackExplanation" class="text-sm text-slate-200 bg-slate-800/80 p-4 rounded-xl border border-slate-700 leading-relaxed">
+                    <!-- Explanation text -->
+                </div>
+
+                <div class="flex justify-end">
+                    <button onclick="nextQuestion()" class="btn-3d-gold px-6 py-2.5 rounded-xl font-bold text-sm flex items-center gap-2">
+                        TERUSKAN <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= RESULTS SCREEN ================= -->
+        <section id="resultsScreen" class="view-screen hidden space-y-6">
+            <div class="glass-card rounded-3xl p-6 md:p-10 text-center space-y-6 relative overflow-hidden">
+                <div class="inline-block p-4 bg-gradient-to-tr from-amber-400 to-orange-500 rounded-full text-slate-900 text-4xl shadow-xl mb-2">
+                    <i id="resultIcon" class="fa-solid fa-trophy"></i>
+                </div>
+
+                <div>
+                    <h2 class="text-2xl md:text-4xl font-black text-white" id="resultGradeTitle">Master Tatabahasa!</h2>
+                    <p class="text-slate-300 text-sm mt-1" id="resultSubtitle">Pencapaian luar biasa dalam modul ini.</p>
+                </div>
+
+                <!-- Stats summary grid -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
+                    <div class="bg-slate-800/80 p-4 rounded-2xl border border-slate-700">
+                        <span class="text-xs text-slate-400 block font-semibold">Jumlah Mata</span>
+                        <span id="resultScoreText" class="text-2xl font-black text-amber-400">100 XP</span>
+                    </div>
+
+                    <div class="bg-slate-800/80 p-4 rounded-2xl border border-slate-700">
+                        <span class="text-xs text-slate-400 block font-semibold">Ketepatan</span>
+                        <span id="resultAccuracyText" class="text-2xl font-black text-emerald-400">100%</span>
+                    </div>
+
+                    <div class="bg-slate-800/80 p-4 rounded-2xl border border-slate-700">
+                        <span class="text-xs text-slate-400 block font-semibold">Betul / Salah</span>
+                        <span id="resultCorrectWrongText" class="text-xl font-black text-blue-300">10 / 0</span>
+                    </div>
+
+                    <div class="bg-slate-800/80 p-4 rounded-2xl border border-slate-700">
+                        <span class="text-xs text-slate-400 block font-semibold">Streak Maks</span>
+                        <span id="resultMaxStreakText" class="text-xl font-black text-orange-400">10</span>
+                    </div>
+                </div>
+
+                <!-- Action buttons -->
+                <div class="flex flex-wrap justify-center gap-4 pt-4">
+                    <button onclick="reviewAnswers()" class="btn-3d-purple px-6 py-3 rounded-xl font-bold text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-magnifying-glass"></i> SEMAK JAWAPAN
+                    </button>
+                    <button onclick="replayCurrentMission()" class="btn-3d-gold px-6 py-3 rounded-xl font-bold text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-rotate-right"></i> MAIN SEMULA
+                    </button>
+                    <button onclick="showScreen('topicSelectScreen')" class="btn-3d-blue px-6 py-3 rounded-xl font-bold text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-list"></i> TUKAR MISI
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= REVIEW ANSWERS SCREEN ================= -->
+        <section id="reviewScreen" class="view-screen hidden space-y-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-2xl font-extrabold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-clipboard-check text-blue-400"></i> Semakan Jawapan Sesi
+                    </h2>
+                    <p class="text-slate-300 text-xs">Ulang kaji semula setiap soalan, jawapan anda dan penerangan lengkap tatabahasa.</p>
+                </div>
+                <button onclick="showScreen('resultsScreen')" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-xl text-xs font-bold text-white">
+                    <i class="fa-solid fa-arrow-left"></i> Kembali Ke Keputusan
+                </button>
+            </div>
+
+            <div id="reviewListContainer" class="space-y-4">
+                <!-- Injected dynamically -->
+            </div>
+        </section>
+
+        <!-- ================= GRAMMAR GUIDE / NOTES SCREEN ================= -->
+        <section id="grammarGuideScreen" class="view-screen hidden space-y-6">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-book-bookmark text-purple-400"></i> Panduan Tatabahasa KSSM T4
+                    </h2>
+                    <p class="text-slate-300 text-xs md:text-sm">Nota rujukan padat Tatabahasa Dewan mengikut format SPM.</p>
+                </div>
+                <button onclick="showScreen('mainMenu')" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-xl text-xs font-bold text-white">
+                    <i class="fa-solid fa-house mr-1"></i> Menu Utama
+                </button>
+            </div>
+
+            <!-- Guide Tabs Navigation -->
+            <div class="flex gap-2 overflow-x-auto pb-2 border-b border-slate-700/80" id="guideTabsNav">
+                <!-- Tabs inserted via JS -->
+            </div>
+
+            <!-- Active Tab Content Card -->
+            <div class="glass-card rounded-3xl p-6 md:p-8 space-y-6" id="guideTabContent">
+                <!-- Injected dynamically -->
+            </div>
+        </section>
+
+        <!-- ================= ACHIEVEMENTS & BADGES SCREEN ================= -->
+        <section id="achievementsScreen" class="view-screen hidden space-y-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-award text-amber-400"></i> Lencana & Pencapaian
+                    </h2>
+                    <p class="text-slate-300 text-xs md:text-sm">Kumpul kesemua lencana kebanggaan Master Tatabahasa Bahasa Melayu.</p>
+                </div>
+                <button onclick="showScreen('mainMenu')" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-xl text-xs font-bold text-white">
+                    <i class="fa-solid fa-house mr-1"></i> Menu Utama
+                </button>
+            </div>
+
+            <!-- Badges Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="badgesGrid">
+                <!-- Badges rendered dynamically -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="max-w-6xl mx-auto w-full mt-8 text-center text-xs text-slate-400 py-3 border-t border-slate-800">
+        <p>© 2026 Misi Master Tatabahasa Tingkatan 4 — Direka khas untuk persediaan Peperiksaan SPM (KSSM Bahasa Melayu).</p>
+    </footer>
+
+    <script>
+        /* ==========================================================================
+           QUESTION BANK - 60+ SPM STANDARD QUESTIONS (6 MISSIONS)
+           ========================================================================== */
+        const QUESTION_BANK = {
+            misi1: [
+                {
+                    id: 'm1_1',
+                    category: 'Golongan Kata',
+                    type: 'mcq',
+                    title: 'Pilih kata adjektif pancaindera yang sesuai untuk melengkapkan ayat di bawah.',
+                    context: 'Pengunjung di restoran terkenal itu terliur apabila menghidu bau masakan yang amat ____ dari arah dapur.',
+                    options: ['hancing', 'harum', 'kelat', 'nyaring'],
+                    answer: 1,
+                    explanation: 'Perkataan "harum" ialah kata adjektif pancaindera bau yang tepat untuk merujuk kepada aroma masakan yang menyelerakan.'
+                },
+                {
+                    id: 'm1_2',
+                    category: 'Golongan Kata',
+                    type: 'mcq',
+                    title: 'Pilih penggunaan Kata Pemeri "ialah" dan "adalah" yang gramatis.',
+                    context: 'I: Punca utama kejadian banjir kilat itu ialah pembuangan sampah ke dalam sungai.\nII: Sumbangan tersebut adalah untuk mangsa kebakaran.',
+                    options: ['Pernyataan I sahaja betul', 'Pernyataan II sahaja betul', 'Kedua-dua pernyataan I dan II betul', 'Kedua-dua pernyataan salah'],
+                    answer: 2,
+                    explanation: '"Ialah" digunakan di hadapan frasa nama ("punca..."), manakala "adalah" digunakan di hadapan frasa sendi nama ("untuk mangsa..."). Kedua-dua ayat adalah gramatis!'
+                },
+                {
+                    id: 'm1_3',
+                    category: 'Golongan Kata',
+                    type: 'mcq',
+                    title: 'Antara berikut, yang manakah merupakan Kata Tugas jenis Kata Sendi Nama?',
+                    options: ['kerana', 'daripada', 'bahawa', 'amat'],
+                    answer: 1,
+                    explanation: '"Daripada" ialah kata sendi nama (digunakan untuk menyatakan asal kejadian, perbandingan, dan keanggotaan). "Kerana" & "bahawa" ialah kata hubung, manakala "amat" ialah kata penguat.'
+                },
+                {
+                    id: 'm1_4',
+                    category: 'Golongan Kata',
+                    type: 'mcq',
+                    title: 'Pilih ayat yang mengandungi Kata Bantu Aspek yang betul.',
+                    context: 'Murid-murid Tingkatan 4 ____ menyiapkan tugasan Bahasa Melayu itu sejak minggu lepas lagi.',
+                    options: ['hendak', 'telah', 'mesti', 'boleh'],
+                    answer: 1,
+                    explanation: '"Telah" ialah kata bantu aspek yang menunjukkan perbuatan yang sudah berlaku pada masa lalu.'
+                },
+                {
+                    id: 'm1_5',
+                    category: 'Golongan Kata',
+                    type: 'mcq',
+                    title: 'Pilih pasangan Kata Bilangan Tak Tentu yang betul.',
+                    options: ['setiap / masing-masing', 'beberapa / sekalian', 'pertama / kedua', 'satu / dua'],
+                    answer: 1,
+                    explanation: '"Beberapa" dan "sekalian" merupakan kata bilangan tak tentu kerana tidak menunjukkan jumlah yang pasti.'
+                },
+                {
+                    id: 'm1_6',
+                    category: 'Golongan Kata',
+                    type: 'mcq',
+                    title: 'Ayat manakah yang menggunakan Kata Ganti Nama Diri Orang Ketiga dengan betul?',
+                    options: [
+                        'Beliau merupakan seorang tokoh pendidik yang amat disegani.',
+                        'Dia telah dihukum penjara kerana kesalahan merompak.',
+                        'Baginda telah berkenan merasmikan bangunan baharu tersebut.',
+                        'Semua di atas adalah betul mengikut konteks.'
+                    ],
+                    answer: 3,
+                    explanation: 'Semua kata ganti nama (Beliau = tokoh, Dia = penjenayah/umum, Baginda = raja/kerabat) digunakan dengan tepat mengikut konteks sosiobudaya Bahasa Melayu.'
+                },
+                {
+                    id: 'm1_7',
+                    category: 'Golongan Kata',
+                    type: 'mcq',
+                    title: 'Kata Hubung Pancangan Keterangan digunakan untuk menyambungkan klausa utama dengan klausa sampingan. Manakah antara berikut merupakan contohnya?',
+                    options: ['dan', 'atau', 'sekiranya', 'tetapi'],
+                    answer: 2,
+                    explanation: '"Sekiranya" ialah kata hubung pancangan keterangan syarat. Manakala "dan", "atau", "tetapi" merupakan kata hubung gabungan.'
+                },
+                {
+                    id: 'm1_8',
+                    category: 'Golongan Kata',
+                    type: 'mcq',
+                    title: 'Antara kata nama berikut, yang manakah Kata Nama Terbitan?',
+                    options: ['sekolah', 'pelajaran', 'kerusi', 'gunung'],
+                    answer: 1,
+                    explanation: '"Pelajaran" ialah Kata Nama Terbitan yang terbentuk daripada kata dasar "ajar" dengan imbuhan apitan "pe-...-an".'
+                },
+                {
+                    id: 'm1_9',
+                    category: 'Golongan Kata',
+                    type: 'mcq',
+                    title: 'Manakah ayat yang mengandungi Kata Adjektif Cara?',
+                    options: [
+                        'Kereta sport itu memecut dengan amat laju di litar.',
+                        'Baju baharu adik berwarna biru laut.',
+                        'Rumah di atas bukit itu amat besar.',
+                        'Sungai di belakang kampung itu sangat dalam.'
+                    ],
+                    answer: 0,
+                    explanation: '"Laju" ialah Kata Adjektif Cara yang menerangkan kelajuan atau cara pergerakan.'
+                },
+                {
+                    id: 'm1_10',
+                    category: 'Golongan Kata',
+                    type: 'mcq',
+                    title: 'Pilih penggunaan kata sendi nama "dari" dan "daripada" yang betul.',
+                    context: 'Surat itu dikirimkan ____ abang yang berada ____ Kuala Lumpur.',
+                    options: ['dari, daripada', 'daripada, dari', 'dari, dari', 'daripada, daripada'],
+                    answer: 1,
+                    explanation: 'Penggunaan yang betul: "daripada" bagi orang/sumber ("daripada abang") dan "dari" bagi arah/tempat ("dari Kuala Lumpur" -> K.A.M.S: Arah, Tempat, Masa).'
+                }
+            ],
+            misi2: [
+                {
+                    id: 'm2_1',
+                    category: 'Pembentukan Kata',
+                    type: 'mcq',
+                    title: 'Perkataan manakah yang tergolong dalam Kata Majmuk Rangkai Kata Bebas?',
+                    options: ['pilihan raya', 'tandatangan', 'suri rumah', 'setiausaha'],
+                    answer: 0,
+                    explanation: '"Pilihan raya" ialah kata majmuk rangkai kata bebas yang dieja terpisah. "Tandatangan" & "setiausaha" ialah kata majmuk mantap (dieja bercantum).'
+                },
+                {
+                    id: 'm2_2',
+                    category: 'Pembentukan Kata',
+                    type: 'mcq',
+                    title: 'Pilih imbuhan sisipan yang terdapat dalam kata terbitan "gelembung".',
+                    options: ['-el-', '-er-', '-em-', '-in-'],
+                    answer: 0,
+                    explanation: 'Kata "gelembung" berasal daripada kata dasar "kembung/gembung" yang menerima sisipan "-el-".'
+                },
+                {
+                    id: 'm2_3',
+                    category: 'Pembentukan Kata',
+                    type: 'mcq',
+                    title: 'Kata ganda manakah yang tergolong dalam Kata Ganda Semakna / Berentak?',
+                    options: ['kuih-muih', 'buku-buku', 'kanak-kanak', 'rumah-rumah'],
+                    answer: 0,
+                    explanation: '"Kuih-muih" ialah kata ganda berentak pengulangan vokal/konsonan.'
+                },
+                {
+                    id: 'm2_4',
+                    category: 'Pembentukan Kata',
+                    type: 'mcq',
+                    title: 'Antara berikut, yang manakah Kata Terbitan Apitan yang betul pembentukannya?',
+                    options: ['memperkasakan', 'mengemaskinikan', 'menyuburkan', 'penglibatan'],
+                    answer: 3,
+                    explanation: '"Penglibatan" merupakan pembentukan apitan peN-...-an yang betul daripada kata dasar "libat".'
+                },
+                {
+                    id: 'm2_5',
+                    category: 'Pembentukan Kata',
+                    type: 'mcq',
+                    title: 'Antara perkataan berikut, yang manakah Kata Majmuk Mantap (dikehendaki dieja bercantum)?',
+                    options: ['antarabangku', 'warganegara', 'terima kasih', 'bandar raya'],
+                    answer: 1,
+                    explanation: '"Warganegara" ialah salah satu daripada 15 kata majmuk mantap yang dieja bercantum.'
+                },
+                {
+                    id: 'm2_6',
+                    category: 'Pembentukan Kata',
+                    type: 'mcq',
+                    title: 'Pilih kata terbitan awalan peN- bagi kata dasar "kaji".',
+                    options: ['penkaji', 'pengkaji', 'penyaji', 'pemkaji'],
+                    answer: 1,
+                    explanation: 'Kata dasar bermula dengan huruf "k" seperti "kaji" apabila menerima awalan peN- akan menjadi "pengkaji" (imbuhan peng-).'
+                },
+                {
+                    id: 'm2_7',
+                    category: 'Pembentukan Kata',
+                    type: 'mcq',
+                    title: 'Manakah antara berikut Kata Tunggal tiga suku kata?',
+                    options: ['cuaca', 'pelajar', 'sekolah', 'gelora'],
+                    answer: 0,
+                    explanation: '"Cuaca" (cua-ca) dan "gelora" (ge-lo-ra) ialah kata tunggal, tetapi "cuaca" merupakan kata tunggal tulen tanpa Imbuhan.'
+                },
+                {
+                    id: 'm2_8',
+                    category: 'Pembentukan Kata',
+                    type: 'mcq',
+                    title: 'Pilih penggandaan separa berimbuhan awalan yang tepat.',
+                    options: ['berlari-lari', 'bersatu-padu', 'laki-laki', 'jejari'],
+                    answer: 0,
+                    explanation: '"Berlari-lari" ialah kata ganda separa yang menerima awalan "ber-".'
+                },
+                {
+                    id: 'm2_9',
+                    category: 'Pembentukan Kata',
+                    type: 'mcq',
+                    title: 'Manakah merupakan kata terbitan hasil daripada akhiran -an bagi kata kerja "makan"?',
+                    options: ['makanan', 'pemakanan', 'termakan', 'sisa makan'],
+                    answer: 0,
+                    explanation: '"Makanan" terbentuk daripada kata dasar "makan" + akhiran "-an".'
+                },
+                {
+                    id: 'm2_10',
+                    category: 'Pembentukan Kata',
+                    type: 'mcq',
+                    title: 'Gabungan kata majmuk yang membawa maksud kiasan dikenali sebagai kiasan majmuk. Contohnya ialah:',
+                    options: ['pilih kasih', 'meja makan', 'jam tangan', 'kereta lembu'],
+                    answer: 0,
+                    explanation: '"Pilih kasih" ialah kata majmuk yang membawa maksud simpulan bahasa/kiasan (tidak adil).'
+                }
+            ],
+            misi3: [
+                {
+                    id: 'm3_1',
+                    category: 'Frasa dan Klausa',
+                    type: 'mcq',
+                    title: 'Kenal pasti konstituen Frasa Nama (FN) + Frasa Kerja (FK) dalam ayat di bawah.',
+                    context: 'Ibu negara Malaysia sedang membangun dengan pesat sekali.',
+                    options: [
+                        'FN: Ibu negara Malaysia | FK: sedang membangun dengan pesat sekali',
+                        'FN: Ibu negara | FK: Malaysia sedang membangun',
+                        'FN: Ibu | FK: negara Malaysia',
+                        'FN: Malaysia | FK: membangun'
+                    ],
+                    answer: 0,
+                    explanation: 'Subjek = "Ibu negara Malaysia" (FN), Predikat = "sedang membangun dengan pesat sekali" (FK).'
+                },
+                {
+                    id: 'm3_2',
+                    category: 'Frasa dan Klausa',
+                    type: 'mcq',
+                    title: 'Pilih ayat yang mempunyai pola Frasa Nama + Frasa Adjektif (FN + FA).',
+                    options: [
+                        'Bangunan pencakar langit itu tinggi sungguh.',
+                        'Bapa saya pegawai polis di ibu pejabat.',
+                        'Adik sedang membaca buku cerita di bilik.',
+                        'Rombongan sekolah kami ke Melaka.'
+                    ],
+                    answer: 0,
+                    explanation: 'Subjek = "Bangunan pencakar langit itu" (FN), Predikat = "tinggi sungguh" (FA).'
+                },
+                {
+                    id: 'm3_3',
+                    category: 'Frasa dan Klausa',
+                    type: 'mcq',
+                    title: 'Antara berikut, yang manakah klausa bebas?',
+                    context: 'Ahmad tidak hadir ke sekolah kerana dia mengalami demam panas.',
+                    options: ['kerana dia mengalami demam panas', 'Ahmad tidak hadir ke sekolah', 'mengalami demam panas', 'tidak hadir ke sekolah kerana'],
+                    answer: 1,
+                    explanation: '"Ahmad tidak hadir ke sekolah" boleh berdiri sendiri sebagai ayat lengkap (Klausa Bebas).'
+                },
+                {
+                    id: 'm3_4',
+                    category: 'Frasa dan Klausa',
+                    type: 'mcq',
+                    title: 'Pilih frasa yang menduduki pola FN + FS (Frasa Sendi Nama).',
+                    options: [
+                        'Rumah banglo mewah itu untuk ibu bapa saya.',
+                        'Anak murid cikgu Rohani sangat bijak.',
+                        'Pengetua sekolah sedang memberikan ucapan.',
+                        'Pengarah syarikat itu abang saya.'
+                    ],
+                    answer: 0,
+                    explanation: 'Predikat "untuk ibu bapa saya" bermula dengan kata sendi nama "untuk" (FS).'
+                },
+                {
+                    id: 'm3_5',
+                    category: 'Frasa dan Klausa',
+                    type: 'mcq',
+                    title: 'Pilih ayat yang subjeknya telah mengalami susunan songsang.',
+                    options: [
+                        'Sangat indah pemandangan di tanah tinggi Cameron itu.',
+                        'Pemandangan di tanah tinggi Cameron itu sangat indah.',
+                        'Tanah tinggi Cameron mempunyai pemandangan yang indah.',
+                        'Kami menikmati pemandangan di Cameron Highlands.'
+                    ],
+                    answer: 0,
+                    explanation: 'Ayat susunan songsang meletakkan predikat ("Sangat indah") di hadapan subjek ("pemandangan di tanah tinggi Cameron itu").'
+                },
+                {
+                    id: 'm3_6',
+                    category: 'Frasa dan Klausa',
+                    type: 'mcq',
+                    title: 'Hukum D-M (Diterangkan - Menerangkan) digunakan secara tepat dalam frasa:',
+                    options: ['cili sos', 'goreng pisang', 'sos cili', 'mini bas'],
+                    answer: 2,
+                    explanation: 'Berdasarkan Hukum D-M, unsur utama yang diterangkan berada di hadapan (Sos = D), diikuti penerang (cili = M) -> "Sos cili".'
+                },
+                {
+                    id: 'm3_7',
+                    category: 'Frasa dan Klausa',
+                    type: 'mcq',
+                    title: 'Manakah susunan frasa yang melanggar Hukum D-M?',
+                    options: ['Restoran Nasi Kandar', 'Goreng pisang panas', 'Pisang goreng', 'Klinik Suraya'],
+                    answer: 1,
+                    explanation: '"Goreng pisang" adalah salah kerana "goreng" ialah perbuatan, manakala makanan tersebut ialah "pisang" yang digoreng -> "pisang goreng".'
+                },
+                {
+                    id: 'm3_8',
+                    category: 'Frasa dan Klausa',
+                    type: 'mcq',
+                    title: 'Kenal pasti predikat bagi ayat: "Di dalam bilik bacaan, adik saya sedang mengulangi kaji pelajaran."',
+                    options: ['Di dalam bilik bacaan', 'adik saya', 'sedang mengulang kaji pelajaran', 'bilik bacaan adik'],
+                    answer: 2,
+                    explanation: 'Subjek = "adik saya", Predikat = "sedang mengulang kaji pelajaran". Frasa "Di dalam bilik bacaan" ialah keterangan tempat.'
+                },
+                {
+                    id: 'm3_9',
+                    category: 'Frasa dan Klausa',
+                    type: 'mcq',
+                    title: 'Klausa tak bebas dalam ayat majmuk berfungsi sebagai:',
+                    options: ['Klausa utama', 'Klausa sampingan / pelengkap / keterangan', 'Subjek tunggal', 'Predikat asas'],
+                    answer: 1,
+                    explanation: 'Klausa tak bebas memerlukan klausa utama untuk membentuk makna yang lengkap.'
+                },
+                {
+                    id: 'm3_10',
+                    category: 'Frasa dan Klausa',
+                    type: 'mcq',
+                    title: 'Pilih frasa nama yang mengandungi unsur penerang kegunaan.',
+                    options: ['minyak masak', 'baju merah', 'rumah batu', 'kasut abang'],
+                    answer: 0,
+                    explanation: '"Masak" menerangkan fungsi/kegunaan bagi "minyak" (Minyak untuk memasak).'
+                }
+            ],
+            misi4: [
+                {
+                    id: 'm4_1',
+                    category: 'Pembinaan Ayat',
+                    type: 'mcq',
+                    title: 'Pilih ayat pasif yang gramatis mengikut sistem tatabahasa Bahasa Melayu.',
+                    options: [
+                        'Buku cerita itu dibaca oleh saya semalam.',
+                        'Buku cerita itu saya baca semalam.',
+                        'Buku cerita itu dibaca saya semalam.',
+                        'Saya membaca akan buku cerita itu.'
+                    ],
+                    answer: 1,
+                    explanation: 'Bagi kata ganti nama diri pertama ("saya"), struktur ayat pasif yang betul ialah [Objek + Kata Ganti Nama Diri 1 + Kata Kerja Dasar] -> "Buku cerita itu saya baca".'
+                },
+                {
+                    id: 'm4_2',
+                    category: 'Pembinaan Ayat',
+                    type: 'mcq',
+                    title: 'Antara berikut, yang manakah Ayat Majmuk Gabungan?',
+                    options: [
+                        'Ahmad membaca novel manakala adiknya melukis gambar.',
+                        'Beliau menyatakan bahawa persidangan itu ditangguhkan.',
+                        'Murid yang rajin itu mendapat keputusan cemerlang.',
+                        'Ibu memasak sup ayam untuk adik yang demam.'
+                    ],
+                    answer: 0,
+                    explanation: 'Kata hubung "manakala" menghubungkan dua klausa setara membentuk Ayat Majmuk Gabungan.'
+                },
+                {
+                    id: 'm4_3',
+                    category: 'Pembinaan Ayat',
+                    type: 'mcq',
+                    title: 'Pilih ragam Ayat Perintah jenis Ayat Permintaan.',
+                    options: [
+                        'Tolong serahkan borang ini kepada guru kelas anda.',
+                        'Jangan buang sampah di kawasan lapang ini.',
+                        'Sila duduk di kerusi yang disediakan.',
+                        'Usah diratapi lagi peristiwa lalu itu.'
+                    ],
+                    answer: 0,
+                    explanation: 'Perkataan "Tolong" menandakan ayat perintah jenis permintaan.'
+                },
+                {
+                    id: 'm4_4',
+                    category: 'Pembinaan Ayat',
+                    type: 'mcq',
+                    title: 'Tukarkan ayat aktif berikut kepada ayat pasif: "Pengurus syarikat itu telah meluluskan permohonan cuti Encik Amir."',
+                    options: [
+                        'Permohonan cuti Encik Amir telah diluluskan oleh pengurus syarikat itu.',
+                        'Encik Amir diluluskan permohonan cuti oleh pengurus syarikat.',
+                        'Permohonan cuti Encik Amir telah pengurus syarikat luluskan.',
+                        'Pengurus syarikat diluluskan oleh permohonan cuti Encik Amir.'
+                    ],
+                    answer: 0,
+                    explanation: 'Bagi kata ganti nama diri ketiga ("pengurus syarikat"), gunakan imbuhan "di-...-kan" + "oleh" -> "telah diluluskan oleh...".'
+                },
+                {
+                    id: 'm4_5',
+                    category: 'Pembinaan Ayat',
+                    type: 'mcq',
+                    title: 'Antara berikut, yang manakah Ayat Seruan yang gramatis?',
+                    options: [
+                        'Wah, cantiknya pemandangan matahari terbenam di pantai ini!',
+                        'Amboi, mahalnya harga baju ini?',
+                        'Aduh, beraninya budak itu memanjat pokok tinggi.',
+                        'Syabas, kamu telah gagal dalam ujian tersebut!'
+                    ],
+                    answer: 0,
+                    explanation: 'Kata seru "Wah" digunakan untuk mengagumi keindahan beserta tanda seru (!) di hujung ayat.'
+                },
+                {
+                    id: 'm4_6',
+                    category: 'Pembinaan Ayat',
+                    type: 'mcq',
+                    title: 'Pilih ayat yang mengandungi Kata Tanya dengan kata penegas "-kah" yang betul.',
+                    options: [
+                        'Siapakah nama pegawai yang bertugas di kaunter itu?',
+                        'Nama pegawai yang bertugas di kaunter itu siapakah?',
+                        'Apakah kamu sudah makan tengah hari tadi?',
+                        'Adakah nama kamu di dalam senarai ini siapa?'
+                    ],
+                    answer: 0,
+                    explanation: 'Apabila kata tanya dipindahkan ke hadapan ayat (penyongsangan), partidikel penegas "-kah" wajib ditambahkan.'
+                },
+                {
+                    id: 'm4_7',
+                    category: 'Pembinaan Ayat',
+                    type: 'mcq',
+                    title: 'Manakah merupakan Ayat Tunggal?',
+                    options: [
+                        'Pemuda yang berbaju biru itu abang saya.',
+                        'Siti berjoging di taman rekreasi pada setiap pagi.',
+                        'Kerana hujan turun dengan lebat, perlawanan bola sepak dihentikan.',
+                        'Bapa membaca surat khabar sambil mendengar radio.'
+                    ],
+                    answer: 1,
+                    explanation: '"Siti berjoging di taman rekreasi pada setiap pagi" hanya mengandungi satu subjek dan satu predikat (Ayat Tunggal).'
+                },
+                {
+                    id: 'm4_8',
+                    category: 'Pembinaan Ayat',
+                    type: 'mcq',
+                    title: 'Pilih ayat pasif yang menggunakan kata kena kerja "ter-".',
+                    options: [
+                        'Pintu bilik itu terbuka oleh angin kencang.',
+                        'Batu besar itu dipindahkan oleh mereka.',
+                        'Sampah sarap itu dibakar oleh Pak Samad.',
+                        'Buku itu sudah saya pulangkan.'
+                    ],
+                    answer: 0,
+                    explanation: 'Ayat pasif dianjurkan menggunakan kata kerja berimbuhan ter- ("terbuka oleh...") bagi menyatakan ketidaksengajaan/keupayaan.'
+                },
+                {
+                    id: 'm4_9',
+                    category: 'Pembinaan Ayat',
+                    type: 'mcq',
+                    title: 'Tentukan jenis ayat bagi: "Sila simpankan barang-barang ini di dalam almari."',
+                    options: ['Ayat Penyata', 'Ayat Silaan (Ayat Perintah)', 'Ayat Tanya', 'Ayat Seruan'],
+                    answer: 1,
+                    explanation: 'Kata "Sila" menunjukkan ayat tersebut merupakan Ayat Perintah jenis Ayat Silaan.'
+                },
+                {
+                    id: 'm4_10',
+                    category: 'Pembinaan Ayat',
+                    type: 'mcq',
+                    title: 'Manakah gabungan ayat tunggal berikut yang menjadi Ayat Majmuk Pancangan Relatif yang betul?',
+                    context: 'Ayat 1: Budak itu jiran saya.\nAyat 2: Budak itu menangis.',
+                    options: [
+                        'Budak yang menangis itu jiran saya.',
+                        'Budak itu menangis dan jiran saya.',
+                        'Budak itu jiran saya manakala dia menangis.',
+                        'Budak itu jiran saya kerana dia menangis.'
+                    ],
+                    answer: 0,
+                    explanation: 'Kata hubung relatif "yang" digunakan untuk memancangkan ayat menjadi Ayat Majmuk Relatif.'
+                }
+            ],
+            misi5: [
+                {
+                    id: 'm5_1',
+                    category: 'Kesalahan Tatabahasa',
+                    type: 'mcq',
+                    title: 'Kenal pasti kesalahan tatabahasa dalam ayat berikut.',
+                    context: 'Di antara faktor utama pencemaran sungai ialah disebabkan oleh pembuangan sisa toksik kilang.',
+                    options: [
+                        'Sepatutnya gunakan "Antara", bukannya "Di antara".',
+                        'Sepatutnya gunakan "disebabkan", bukannya "oleh".',
+                        'Penggunaan "ialah disebabkan oleh" tidak perlu berangkai sedemikian.',
+                        'Kedua-dua jawapan A dan C mengandungi kesalahan.'
+                    ],
+                    answer: 3,
+                    explanation: 'Kesalahan: 1) "Di antara" sepatutnya "Antara" (abstrak). 2) "ialah disebabkan oleh" lewah, sepatutnya "Antara faktor... ialah pembuangan..." atau "...disebabkan oleh pembuangan...".'
+                },
+                {
+                    id: 'm5_2',
+                    category: 'Kesalahan Tatabahasa',
+                    type: 'mcq',
+                    title: 'Pilih ayat yang BEBAS daripada kesalahan penggunaan kata pemeri.',
+                    options: [
+                        'Surat yang dihantar itu adalah daripada pihak sekolah.',
+                        'Adalah dimaklumkan bahawa sekolah akan bercuti esok.',
+                        'Ialah menjadi kewajipan kita untuk menjaga alam sekitar.',
+                        'Baju yang berwarna merah itu ialah amat cantik.'
+                    ],
+                    answer: 0,
+                    explanation: '"adalah" betul di hadapan frasa sendi nama "daripada". Menggunakan "Adalah dimaklumkan" di awal ayat tanpa subjek juga merupakan kesalahan lazim.'
+                },
+                {
+                    id: 'm5_3',
+                    category: 'Kesalahan Tatabahasa',
+                    type: 'mcq',
+                    title: 'Pilih ayat yang betul dari segi penggunaan Penjodoh Bilangan.',
+                    options: [
+                        'Setiap orang murid-murid perlu mematuhi peraturan sekolah.',
+                        'Semua murid-murid dikehendaki berkumpul di padang.',
+                        'Setiap murid perlu mematuhi peraturan sekolah.',
+                        'Sesetengah murid-murid tidak membawa buku latihan.'
+                    ],
+                    answer: 2,
+                    explanation: 'Kata bilangan "Setiap" / "Semua" / "Sesetengah" tidak boleh diikuti oleh kata nama ganda ("murid-murid") kerana membawa kelewahan.'
+                },
+                {
+                    id: 'm5_4',
+                    category: 'Kesalahan Tatabahasa',
+                    type: 'mcq',
+                    title: 'Betulkan kesalahan kata sendi nama dalam ayat: "Beliau menyatakan yang mesyuarat itu ditangguhkan."',
+                    options: [
+                        'Beliau menyatakan bahawa mesyuarat itu ditangguhkan.',
+                        'Beliau menyatakan bila mesyuarat itu ditangguhkan.',
+                        'Beliau menyatakan tentang mesyuarat itu ditangguhkan.',
+                        'Beliau menyatakan agar mesyuarat itu ditangguhkan.'
+                    ],
+                    answer: 0,
+                    explanation: 'Kata hubung pancangan komplemen "bahawa" mesti digunakan selepas kata kerja transitif "menyatakan", bukannya "yang".'
+                },
+                {
+                    id: 'm5_5',
+                    category: 'Kesalahan Tatabahasa',
+                    type: 'mcq',
+                    title: 'Pilih pembetulan yang betul bagi ayat: "Selain daripada itu, kita perlu bersemangat patriotik."',
+                    options: [
+                        'Selain itu, kita perlu bersemangat patriotik.',
+                        'Selain dari itu, kita perlu bersemangat patriotik.',
+                        'Disamping itu, kita perlu bersemangat patriotik.',
+                        'Selain daripada demikian, kita perlu bersemangat patriotik.'
+                    ],
+                    answer: 0,
+                    explanation: 'Frasa "Selain daripada itu" ialah kesalahan lewah. Yang betul ialah "Selain itu".'
+                },
+                {
+                    id: 'm5_6',
+                    category: 'Kesalahan Tatabahasa',
+                    type: 'mcq',
+                    title: 'Mana satu frasa imbuhan yang betul?',
+                    options: ['memperolehi', 'memperoleh', 'memperolehan', 'didiperoleh'],
+                    answer: 1,
+                    explanation: 'Imbuhan "memper-..." tidak boleh menerima akhiran "-i" bagi kata dasar "oleh". Sebaliknya menjadi "memperoleh".'
+                },
+                {
+                    id: 'm5_7',
+                    category: 'Kesalahan Tatabahasa',
+                    type: 'mcq',
+                    title: 'Ayat yang manakah betul dari segi penggunaan imbuhan meN-...-kan?',
+                    options: [
+                        'Ibu memasakkan adik sup ayam yang lezat.',
+                        'Ibu memasak sup ayam untuk adik.',
+                        'Ibu memasakkan sup ayam untuk adik.',
+                        'Kedua-dua A dan B betul.'
+                    ],
+                    answer: 3,
+                    explanation: 'Imbuhan meN-...-kan membawa maksud benefaktif (membuatkan sesuatu untuk orang lain): "memasakkan adik" ATAU "memasak... untuk adik".'
+                },
+                {
+                    id: 'm5_8',
+                    category: 'Kesalahan Tatabahasa',
+                    type: 'mcq',
+                    title: 'Pilih ayat yang TIDAK mengandungi kesalahan kelewahan kata.',
+                    options: [
+                        'Banyak terdapat beraneka jenis kuih-muih di pasar malam.',
+                        'Pelbagai jenis kuih dijual di pasar malam itu.',
+                        'Senarai nama-nama peserta telah ditampal.',
+                        'Demi untuk negara, kita sanggup berkorban.'
+                    ],
+                    answer: 1,
+                    explanation: 'A: "Banyak beraneka kuih-muih" (lewah). C: "Senarai nama-nama" (lewah). D: "Demi untuk" (lewah - pilih salah satu).'
+                },
+                {
+                    id: 'm5_9',
+                    category: 'Kesalahan Tatabahasa',
+                    type: 'mcq',
+                    title: 'Betulkan penggunaan frasa: "iaitu merupai salah satu cabaran..."',
+                    options: [
+                        'merupakan salah satu cabaran',
+                        'ialah merupakan satu cabaran',
+                        'adalah merupakan cabaran',
+                        'merupai akan cabaran'
+                    ],
+                    answer: 0,
+                    explanation: 'Kata kerja "merupakan" tidak perlu digabungkan dengan "ialah/adalah". "Merupai" bermaksud menyerupai.'
+                },
+                {
+                    id: 'm5_10',
+                    category: 'Kesalahan Tatabahasa',
+                    type: 'mcq',
+                    title: 'Manakah ayat yang gramatis dari segi kata penguat?',
+                    options: [
+                        'Pemandangan di puncak gunung itu amat indah sekali.',
+                        'Pemandangan di puncak gunung itu paling indah sekali.',
+                        'Pemandangan di puncak gunung itu nian indah.',
+                        'Pemandangan di puncak gunung itu terlalu amat indah.'
+                    ],
+                    answer: 0,
+                    explanation: 'Penguat bebas "amat" boleh digabungkan dengan penguat belakang "sekali" (amat indah sekali). Manakala "paling" tidak boleh digabungkan dengan "sekali".'
+                }
+            ],
+            misi6: [
+                {
+                    id: 'm6_1',
+                    category: 'Penyunting Bahasa',
+                    type: 'editing',
+                    title: 'Kenal pasti kesalahan bahasa dalam petikan di bawah dan pilih jawapan pembetulan yang paling tepat.',
+                    context: 'Kempen Cintai Alam Sekitar yang dianjurkan oleh kelab alam sekitar sekolah kami mendapat sambutan yang amat menggalakkan dari para murid-murid.',
+                    options: [
+                        'dari -> daripada | para murid-murid -> para murid',
+                        'dari -> daripada | menggalakkan -> digalakkan',
+                        'dianjurkan -> menganjurkan | dari -> kepada',
+                        'sekolah kami -> sekolah kita | para murid-murid -> murid'
+                    ],
+                    answer: 0,
+                    explanation: '1) "dari" ditukar kepada "daripada" (merujuk orang/murid). 2) "para murid-murid" ialah kelewahan, sepatutnya "para murid".'
+                },
+                {
+                    id: 'm6_2',
+                    category: 'Penyunting Bahasa',
+                    type: 'editing',
+                    title: 'Sunting kesalahan istilah dan imbuhan dalam petikan ringkas berikut.',
+                    context: 'Pihak polis telah berjaya menyasarkan dalang utama kes kecurian motokar berkuasa tinggi itu di dalam satu operasi khas.',
+                    options: [
+                        'menyasarkan -> berkas/menangkap | di dalam -> dalam',
+                        'menyasarkan -> menyiasat | motokar -> motosikal',
+                        'berjaya -> keterlanjuran | di dalam -> daripada',
+                        'operasi -> praktikal | utama -> sampingan'
+                    ],
+                    answer: 0,
+                    explanation: '1) "menyasarkan" kurang tepat, sepatutnya "berkas/menangkap/mengenal pasti". 2) "di dalam operasi" sepatutnya "dalam operasi" (abstrak/tidak fizikal).'
+                },
+                {
+                    id: 'm6_3',
+                    category: 'Penyunting Bahasa',
+                    type: 'editing',
+                    title: 'Sunting kesalahan struktur ayat dan kata hubung dalam petikan ini.',
+                    context: 'Bapa memaklumkan yang beliau tidak dapat hadir ke majlis itu oleh kerana mempunyai urusan rasmi di luar daerah.',
+                    options: [
+                        'yang -> bahawa | oleh kerana -> kerana / oleh sebab',
+                        'memaklumkan -> memberitahu | luar daerah -> dalam negeri',
+                        'beliau -> dia | majlis itu -> majlis ini',
+                        'oleh kerana -> disebabkan | tidak dapat -> tidak boleh'
+                    ],
+                    answer: 0,
+                    explanation: '1) "yang" sepatutnya kata hubung komplemen "bahawa". 2) "oleh kerana" ialah kesalahan frasa, yang betul ialah "kerana" atau "oleh sebab".'
+                },
+                {
+                    id: 'm6_4',
+                    category: 'Penyunting Bahasa',
+                    type: 'editing',
+                    title: 'Petikan berikut mengandungi kesalahan imbuhan. Kenal pasti pembetulan yang tepat.',
+                    context: 'Program gotong-royong itu diadakan untuk memperkemaskan lagi hubungan silaturahim antara penduduk taman.',
+                    options: [
+                        'memperkemaskan -> memperkemas / mengeratkan | silaturahim -> silaturahim',
+                        'diadakan -> diada | penduduk -> penduduk-penduduk',
+                        'gotong-royong -> bergotong-royong | antara -> di antara',
+                        'hubungan -> terhubung | taman -> perumahan'
+                    ],
+                    answer: 0,
+                    explanation: '"memperkemaskan" lewah dari segi apitan "memper-...-kan". Bagi hubungan silaturahim, kata imbuhan yang paling tepat ialah "mengeratkan" atau "memperkemas".'
+                },
+                {
+                    id: 'm6_5',
+                    category: 'Penyunting Bahasa',
+                    type: 'editing',
+                    title: 'Sunting kesalahan tatabahasa bagi ayat laporan sukan ini.',
+                    context: 'Pasukan bola sepak sekolah kita telah memperolehi kemenangan yang besar berpeluang ke peringkat akhir.',
+                    options: [
+                        'memperolehi -> memperoleh | kemenangan yang besar -> kemenangan besar dan berpeluang',
+                        'sekolah kita -> sekolah kami | kemenangan -> pemenang',
+                        'peringkat -> tangga | akhir -> penamat',
+                        'telah -> pernah | besar -> tinggi'
+                    ],
+                    answer: 0,
+                    explanation: '1) "memperolehi" sepatutnya "memperoleh". 2) Struktur ayat memerlukan kata hubung "dan" untuk menyambungkan frasa "berpeluang ke peringkat akhir".'
+                },
+                {
+                    id: 'm6_6',
+                    category: 'Penyunting Bahasa',
+                    type: 'editing',
+                    title: 'Kenal pasti kesalahan kata pemeri dan frasa sendi nama dalam teks iklan.',
+                    context: 'Iklan ini adalah bertujuan untuk memberitahu tentang aktiviti jualan amal yang akan diadakan di dewan sekolah.',
+                    options: [
+                        'adalah bertujuan -> bertujuan | tentang -> - (digugurkan)',
+                        'memberitahu -> memberitahu bahawa | di dewan -> pada dewan',
+                        'iklan ini -> ini iklan | jualan amal -> amal jualan',
+                        'dihasilkan -> diadakan | untuk -> bagi'
+                    ],
+                    answer: 0,
+                    explanation: '1) "adalah bertujuan" lewah, cukup dengan kata kerja "bertujuan". 2) Kata kerja transitif "memberitahu" terus diikuti objek ("aktiviti jualan amal"), tanpa kata sendi "tentang".'
+                },
+                {
+                    id: 'm6_7',
+                    category: 'Penyunting Bahasa',
+                    type: 'editing',
+                    title: 'Sunting petikan tentang pemakanan sihat ini.',
+                    context: 'Pengambilan makanan seimbang amat penting sekali demi untuk menjamin kesihatan badan yang berpanjangan.',
+                    options: [
+                        'amat penting sekali -> amat penting / penting sekali | demi untuk -> demi / untuk',
+                        'pengambilan -> pengambil | berpanjangan -> panjang',
+                        'seimbang -> menyimbangkan | badan -> tubuh',
+                        'kesihatan -> sihat | menjamin -> dijamin'
+                    ],
+                    answer: 0,
+                    explanation: '1) "amat penting sekali" & "demi untuk" merupakan kesalahan kelewahan bahasa standard SPM.'
+                },
+                {
+                    id: 'm6_8',
+                    category: 'Penyunting Bahasa',
+                    type: 'editing',
+                    title: 'Kenal pasti kesalahan ejaan dan tanda baca dalam kenyataan rasmi ini.',
+                    context: 'Pihak urusetia memohon maaf diatas sebarang kesulitan yang timbul sepanjang program berlangsung.',
+                    options: [
+                        'urusetia -> urus setia | diatas -> di atas',
+                        'memohon -> minta | kesulitan -> susah',
+                        'sebarang -> sesetengah | timbul -> wujud',
+                        'berlangsung -> berjalan | maaf -> ampun'
+                    ],
+                    answer: 0,
+                    explanation: 'Ejaan kata majmuk bebas "urus setia" wajib dieja terpisah. Kata sendi nama "di atas" juga wajib dieja jarak.'
+                },
+                {
+                    id: 'm6_9',
+                    category: 'Penyunting Bahasa',
+                    type: 'editing',
+                    title: 'Sunting kesalahan hukum D-M dalam papan tanda ini.',
+                    context: 'Sila nikmati goreng pisang yang renyah di gerai sos cili pak Mat.',
+                    options: [
+                        'goreng pisang -> pisang goreng | sos cili -> sos cili (sudah betul)',
+                        'pisang -> pisang-pisang | renyah -> garing',
+                        'gerai -> kedai | pak Mat -> Pak Mat',
+                        'nikmati -> menikmati | di gerai -> pada gerai'
+                    ],
+                    answer: 0,
+                    explanation: 'Berdasarkan Hukum D-M, frasa hidangan makanan yang betul ialah "pisang goreng", bukannya "goreng pisang".'
+                },
+                {
+                    id: 'm6_10',
+                    category: 'Penyunting Bahasa',
+                    type: 'editing',
+                    title: 'Sunting kesalahan kata ganti nama dan frasa pasif.',
+                    context: 'Buku latihan tatabahasa yang dibeli oleh saya itu telah hilang dari dalam beg.',
+                    options: [
+                        'dibeli oleh saya -> saya beli | dari dalam -> dari / dalam',
+                        'latihan -> dilatih | hilang -> dihilangkan',
+                        'tatabahasa -> tata bahasa | beg -> poket',
+                        'telah -> sudah | saya -> aku'
+                    ],
+                    answer: 0,
+                    explanation: 'Ayat pasif kata ganti nama diri pertama (saya) mestilah "saya beli". Frasa "dari dalam beg" juga elok diperkemas menjadi "dalam beg".'
+                }
+            ]
+        };
+
+        /* ==========================================================================
+           BADGES & ACHIEVEMENTS DEFINITIONS
+           ========================================================================== */
+        const BADGES_DEFINITIONS = [
+            {
+                id: 'badge_penjelajah',
+                title: 'Penjelajah Kata',
+                icon: 'fa-compass',
+                color: 'from-blue-500 to-indigo-600',
+                desc: 'Selesaikan sekurang-kurangnya 1 Misi Tatabahasa.',
+                reqType: 'missionsCompleted',
+                reqVal: 1
+            },
+            {
+                id: 'badge_pakar_imbuhan',
+                title: 'Pakar Imbuhan',
+                icon: 'fa-cubes',
+                color: 'from-purple-500 to-pink-600',
+                desc: 'Mencapai ketepatan 100% dalam Misi Pembentukan Kata.',
+                reqType: 'perfectMission',
+                reqVal: 'misi2'
+            },
+            {
+                id: 'badge_detektif',
+                title: 'Detektif Bahasa',
+                icon: 'fa-user-secret',
+                color: 'from-amber-500 to-red-600',
+                desc: 'Mencapai skor sekurang-kurangnya 80 XP dalam Kesalahan Tatabahasa.',
+                reqType: 'highScoreMission',
+                reqVal: 'misi5'
+            },
+            {
+                id: 'badge_juara_penyunting',
+                title: 'Juara Penyuntingan',
+                icon: 'fa-pen-nib',
+                color: 'from-emerald-500 to-teal-600',
+                desc: 'Selesaikan Misi Penyunting Bahasa dengan markah cemerlang.',
+                reqType: 'completedMission',
+                reqVal: 'misi6'
+            },
+            {
+                id: 'badge_master',
+                title: 'Master Tatabahasa SPM',
+                icon: 'fa-crown',
+                color: 'from-yellow-400 via-amber-500 to-orange-600',
+                desc: 'Kumpul melebihi 300 XP keseluruhan.',
+                reqType: 'totalXP',
+                reqVal: 300
+            }
+        ];
+
+        /* ==========================================================================
+           PANDUAN TATABAHASA / NOTES DATA
+           ========================================================================== */
+        const GRAMMAR_NOTES = [
+            {
+                misiKey: 'misi1',
+                title: 'Misi 1: Golongan Kata',
+                icon: 'fa-layer-group',
+                summary: 'Golongan kata membahagikan perkataan kepada Kata Nama, Kata Kerja, Kata Adjektif, dan Kata Tugas.',
+                contentHtml: `
+                    <div class="space-y-4">
+                        <div class="bg-slate-800/80 p-4 rounded-xl border border-slate-700">
+                            <h4 class="font-bold text-amber-400 mb-1"><i class="fa-solid fa-check-circle"></i> Kata Pemeri: "Ialah" vs "Adalah"</h4>
+                            <ul class="list-disc list-inside text-xs md:text-sm text-slate-300 space-y-1">
+                                <li><strong class="text-white">Ialah:</strong> Hadir di hadapan <em>Frasa Nama</em>. (Contoh: "Hobi saya <u>ialah</u> membaca buku.")</li>
+                                <li><strong class="text-white">Adalah:</strong> Hadir di hadapan <em>Frasa Adjektif</em> dan <em>Frasa Sendi Nama</em>. (Contoh: "Bantuan itu <u>adalah</u> untuk mangsa banjir.")</li>
+                            </ul>
+                        </div>
+                        <div class="bg-slate-800/80 p-4 rounded-xl border border-slate-700">
+                            <h4 class="font-bold text-blue-400 mb-1"><i class="fa-solid fa-check-circle"></i> Kata Sendi Nama: "Dari" vs "Daripada"</h4>
+                            <p class="text-xs md:text-sm text-slate-300"><strong>Formula K.A.M.S:</strong> "Dari" digunakan untuk <u>K</u>arah, <u>A</u>rah, <u>M</u>asa, <u>S</u>empadan. "Daripada" digunakan untuk manusia, sumber, perbandingan, dan asal kejadian.</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                misiKey: 'misi2',
+                title: 'Misi 2: Pembentukan Kata',
+                icon: 'fa-puzzle-piece',
+                summary: 'Merangkumi Kata Tunggal, Kata Terbitan, Kata Majmuk, dan Kata Ganda.',
+                contentHtml: `
+                    <div class="space-y-4">
+                        <div class="bg-slate-800/80 p-4 rounded-xl border border-slate-700">
+                            <h4 class="font-bold text-purple-400 mb-1"><i class="fa-solid fa-star"></i> Kata Majmuk Mantap (15 Perkataan Bercantum)</h4>
+                            <p class="text-xs md:text-sm text-slate-300">Antarabangsa, Beritahu, Bumiputera, Jawatankuasa, Kakitangan, Kerjasama, Olahraga, Pesuruhjaya, Setiausaha, Sukarela, Suruhanjaya, Tandatangan, Tanggungjawab, Warganegara, Pesuruhjaya.</p>
+                        </div>
+                        <div class="bg-slate-800/80 p-4 rounded-xl border border-slate-700">
+                            <h4 class="font-bold text-emerald-400 mb-1"><i class="fa-solid fa-lightbulb"></i> Sisipan Imbuhan</h4>
+                            <p class="text-xs md:text-sm text-slate-300">Sisipan seperti <em>-el-</em> (gelembung), <em>-em-</em> (gemuruh), <em>-er-</em> (gerigi), <em>-in-</em> (sinambung).</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                misiKey: 'misi3',
+                title: 'Misi 3: Frasa & Klausa',
+                icon: 'fa-diagram-project',
+                summary: 'Memahami susunan Hukum D-M (Diterangkan-Menerangkan) dan Pola Ayat Asas.',
+                contentHtml: `
+                    <div class="space-y-4">
+                        <div class="bg-slate-800/80 p-4 rounded-xl border border-slate-700">
+                            <h4 class="font-bold text-amber-400 mb-1"><i class="fa-solid fa-scale-balanced"></i> Hukum D-M (Diterangkan - Menerangkan)</h4>
+                            <div class="grid grid-cols-2 gap-2 text-xs md:text-sm">
+                                <div class="p-2 bg-emerald-950/40 border border-emerald-500/30 rounded text-emerald-300">
+                                    <strong>Betul:</strong> Sos cili, pisang goreng, restoran nasi kandar, cili sos (jika import).
+                                </div>
+                                <div class="p-2 bg-red-950/40 border border-red-500/30 rounded text-red-300">
+                                    <strong>Salah:</strong> Cili sos, goreng pisang, nasi kandar restoran.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                misiKey: 'misi4',
+                title: 'Misi 4: Pembinaan Ayat',
+                icon: 'fa-pen-ruler',
+                summary: 'Perbezaan Ayat Aktif vs Pasif mengikut kata ganti nama diri.',
+                contentHtml: `
+                    <div class="space-y-4">
+                        <div class="bg-slate-800/80 p-4 rounded-xl border border-slate-700">
+                            <h4 class="font-bold text-blue-400 mb-1"><i class="fa-solid fa-arrows-repeat"></i> Ayat Pasif Diri Pertama vs Ketiga</h4>
+                            <p class="text-xs md:text-sm text-slate-300"><strong>Diri 1/2 (Saya/Kamu):</strong> "Buku itu <u>saya baca</u>." (TANPA imbuhan di- dan oleh).</p>
+                            <p class="text-xs md:text-sm text-slate-300 mt-1"><strong>Diri 3 (Beliau/Mereka):</strong> "Buku itu <u>dibaca oleh mereka</u>." (WAJIB ada di- dan oleh).</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                misiKey: 'misi5',
+                title: 'Misi 5: Kesalahan Tatabahasa',
+                icon: 'fa-triangle-exclamation',
+                summary: 'Mengenal pasti kelewahan, kesalahan imbuhan, dan struktur terjemahan langsung.',
+                contentHtml: `
+                    <div class="space-y-4">
+                        <div class="bg-slate-800/80 p-4 rounded-xl border border-slate-700">
+                            <h4 class="font-bold text-red-400 mb-1"><i class="fa-solid fa-ban"></i> Kesalahan Kelewahan Popular SPM</h4>
+                            <ul class="list-disc list-inside text-xs md:text-sm text-slate-300 space-y-1">
+                                <li><s class="text-red-400">demi untuk</s> &rarr; demi / untuk</li>
+                                <li><s class="text-red-400">selain daripada itu</s> &rarr; selain itu</li>
+                                <li><s class="text-red-400">memperolehi</s> &rarr; memperoleh</li>
+                                <li><s class="text-red-400">semua murid-murid</s> &rarr; semua murid</li>
+                            </ul>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                misiKey: 'misi6',
+                title: 'Misi 6: Penyunting Bahasa',
+                icon: 'fa-file-signature',
+                summary: 'Teknik menjawab soalan penyuntingan petikan Kertas 2 Bahasa Melayu SPM.',
+                contentHtml: `
+                    <div class="space-y-4">
+                        <div class="bg-slate-800/80 p-4 rounded-xl border border-slate-700">
+                            <h4 class="font-bold text-emerald-400 mb-1"><i class="fa-solid fa-magnifying-glass"></i> Panduan Penyuntingan SPM</h4>
+                            <p class="text-xs md:text-sm text-slate-300">Cari kesalahan ejaan, imbuhan, istilah, dan tatabahasa dalam petikan. Pastikan jawapan pembetulan mengekalkan maksud asal petikan.</p>
+                        </div>
+                    </div>
+                `
+            }
+        ];
+
+        /* ==========================================================================
+           STATE MANAGEMENT & GAME ENGINE
+           ========================================================================== */
+        let gameState = {
+            playerName: 'Murid Cemerlang SPM',
+            totalXP: 0,
+            streakDays: 1,
+            unlockedBadges: [],
+            currentDifficulty: 'Asas',
+            currentMissionKey: 'misi1',
+            currentQuestions: [],
+            currentIndex: 0,
+            score: 0,
+            consecutiveCorrect: 0,
+            maxStreakInSession: 0,
+            sessionHistory: [], // stores question + user choice + status
+            audioMuted: false
+        };
+
+        // Initialize Application
+        window.addEventListener('DOMContentLoaded', () => {
+            loadSavedData();
+            renderMissionsGrid();
+            renderBadges();
+            renderGrammarGuideTabs('misi1');
+            updateTopUI();
+        });
+
+        function loadSavedData() {
+            try {
+                const saved = localStorage.getItem('misi_master_tatabahasa_save');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    gameState.playerName = parsed.playerName || 'Murid Cemerlang SPM';
+                    gameState.totalXP = parsed.totalXP || 0;
+                    gameState.streakDays = parsed.streakDays || 1;
+                    gameState.unlockedBadges = parsed.unlockedBadges || [];
+                }
+            } catch (e) {
+                console.log('LocalStorage load error', e);
+            }
+        }
+
+        function saveData() {
+            try {
+                const dataToSave = {
+                    playerName: gameState.playerName,
+                    totalXP: gameState.totalXP,
+                    streakDays: gameState.streakDays,
+                    unlockedBadges: gameState.unlockedBadges
+                };
+                localStorage.setItem('misi_master_tatabahasa_save', JSON.stringify(dataToSave));
+            } catch (e) {
+                console.log('LocalStorage save error', e);
+            }
+        }
+
+        function updateTopUI() {
+            document.getElementById('playerNameDisplay').childNodes[0].nodeValue = gameState.playerName + ' ';
+            document.getElementById('topTotalXP').innerText = gameState.totalXP;
+            document.getElementById('topStreak').innerText = gameState.streakDays + ' Hari';
+
+            // Rank Title based on XP
+            let rank = 'Pengembara Bahasa';
+            if (gameState.totalXP >= 500) rank = 'Master Tatabahasa SPM';
+            else if (gameState.totalXP >= 300) rank = 'Pakar Tatabahasa';
+            else if (gameState.totalXP >= 150) rank = 'Pejuang Bahasa';
+            else if (gameState.totalXP >= 50) rank = 'Peneroka Bahasa';
+
+            document.getElementById('playerRankTitle').innerText = rank;
+        }
+
+        function editPlayerName() {
+            const newName = prompt('Masukkan nama anda:', gameState.playerName);
+            if (newName && newName.trim() !== '') {
+                gameState.playerName = newName.trim();
+                saveData();
+                updateTopUI();
+            }
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.view-screen').forEach(el => el.classList.add('hidden'));
+            const target = document.getElementById(screenId);
+            if (target) {
+                target.classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function toggleAudio() {
+            gameState.audioMuted = !gameState.audioMuted;
+            const btn = document.getElementById('audioToggleBtn');
+            if (gameState.audioMuted) {
+                btn.innerHTML = '<i class="fa-solid fa-volume-xmark text-red-400"></i>';
+            } else {
+                btn.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+            }
+        }
+
+        function playSoundEffect(type) {
+            if (gameState.audioMuted) return;
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                if (type === 'correct') {
+                    osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+                    osc.frequency.exponentialRampToValueAtTime(659.25, ctx.currentTime + 0.15); // E5
+                    gain.gain.setValueAtTime(0.2, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.3);
+                } else if (type === 'wrong') {
+                    osc.frequency.setValueAtTime(220, ctx.currentTime); // A3
+                    osc.frequency.exponentialRampToValueAtTime(146.83, ctx.currentTime + 0.2); // D3
+                    gain.gain.setValueAtTime(0.2, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.3);
+                }
+            } catch (e) {
+                // Audio context fallback
+            }
+        }
+
+        const MISSIONS_METADATA = [
+            { key: 'misi1', title: 'Misi 1: Golongan Kata', icon: 'fa-layer-group', color: 'from-blue-600 to-indigo-700', desc: 'Kata nama, kerja, adjektif, sendi nama & kata pemeri.' },
+            { key: 'misi2', title: 'Misi 2: Pembentukan Kata', icon: 'fa-puzzle-piece', color: 'from-purple-600 to-pink-700', desc: 'Kata tunggal, terbitan, majmuk mantap & kata ganda.' },
+            { key: 'misi3', title: 'Misi 3: Frasa dan Klausa', icon: 'fa-diagram-project', color: 'from-amber-500 to-orange-600', desc: 'Hukum D-M, Frasa Nama, Kerja, Adjektif & Klausa.' },
+            { key: 'misi4', title: 'Misi 4: Pembinaan Ayat', icon: 'fa-pen-ruler', color: 'from-emerald-600 to-teal-700', desc: 'Ayat tunggal/majmuk, ayat aktif/pasif & ayat perintah.' },
+            { key: 'misi5', title: 'Misi 5: Kesalahan Tatabahasa', icon: 'fa-triangle-exclamation', color: 'from-red-600 to-rose-700', desc: 'Kenal pasti kesalahan imbuhan, kelewahan & struktur.' },
+            { key: 'misi6', title: 'Misi 6: Penyunting Bahasa', icon: 'fa-file-signature', color: 'from-cyan-600 to-blue-700', desc: 'Sunting kesalahan bahasa dalam petikan pendek SPM.' }
+        ];
+
+        function renderMissionsGrid() {
+            const container = document.getElementById('missionsGrid');
+            container.innerHTML = '';
+
+            MISSIONS_METADATA.forEach(m => {
+                const card = document.createElement('div');
+                card.className = 'glass-card hover:border-blue-400/60 p-5 rounded-2xl flex flex-col justify-between space-y-4 group transition duration-300 hover:-translate-y-1';
+                card.innerHTML = `
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-tr ${m.color} flex items-center justify-center text-white text-xl shadow-lg">
+                                <i class="fa-solid ${m.icon}"></i>
+                            </div>
+                            <span class="text-[10px] font-black uppercase tracking-wider bg-slate-800 text-slate-300 px-2.5 py-1 rounded-full border border-slate-700">10 Soalan</span>
+                        </div>
+                        <div>
+                            <h3 class="font-extrabold text-lg text-white group-hover:text-blue-300 transition">${m.title}</h3>
+                            <p class="text-xs text-slate-300 mt-1 leading-relaxed">${m.desc}</p>
+                        </div>
+                    </div>
+                    <button onclick="startMissionGame('${m.key}')" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-blue-600 text-slate-200 hover:text-white font-bold text-xs transition flex items-center justify-center gap-2 border border-slate-700">
+                        MULAKAN MISI <i class="fa-solid fa-play text-[10px]"></i>
+                    </button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function setDifficulty(diff) {
+            gameState.currentDifficulty = diff;
+            document.querySelectorAll('.diff-btn').forEach(btn => {
+                btn.className = 'diff-btn px-2.5 py-1 rounded-lg hover:bg-slate-700 text-slate-300';
+            });
+            if (diff === 'Asas') document.getElementById('diffBtnAsas').className = 'diff-btn px-2.5 py-1 rounded-lg bg-blue-600 font-bold text-white';
+            if (diff === 'Pertengahan') document.getElementById('diffBtnPertengahan').className = 'diff-btn px-2.5 py-1 rounded-lg bg-purple-600 font-bold text-white';
+            if (diff === 'SPM') document.getElementById('diffBtnSPM').className = 'diff-btn px-2.5 py-1 rounded-lg bg-amber-600 font-bold text-white';
+        }
+
+        function startQuickGame() {
+            // Pick random mission
+            const keys = Object.keys(QUESTION_BANK);
+            const randomKey = keys[Math.floor(Math.random() * keys.length)];
+            startMissionGame(randomKey);
+        }
+
+        function startDailyChallenge() {
+            // Collect questions across all missions
+            let pool = [];
+            Object.values(QUESTION_BANK).forEach(arr => pool.push(...arr));
+            pool = shuffleArray([...pool]).slice(0, 10);
+
+            gameState.currentMissionKey = 'cabaran_harian';
+            gameState.currentQuestions = pool;
+            gameState.currentIndex = 0;
+            gameState.score = 0;
+            gameState.consecutiveCorrect = 0;
+            gameState.maxStreakInSession = 0;
+            gameState.sessionHistory = [];
+
+            document.getElementById('currentMissionTag').innerHTML = `<i class="fa-solid fa-calendar-star text-amber-400"></i> Cabaran Harian SPM`;
+            showScreen('gameplayScreen');
+            renderCurrentQuestion();
+        }
+
+        function startMissionGame(missionKey) {
+            const pool = QUESTION_BANK[missionKey] || QUESTION_BANK['misi1'];
+            gameState.currentMissionKey = missionKey;
+            gameState.currentQuestions = shuffleArray([...pool]).slice(0, 10);
+            gameState.currentIndex = 0;
+            gameState.score = 0;
+            gameState.consecutiveCorrect = 0;
+            gameState.maxStreakInSession = 0;
+            gameState.sessionHistory = [];
+
+            const meta = MISSIONS_METADATA.find(m => m.key === missionKey) || MISSIONS_METADATA[0];
+            document.getElementById('currentMissionTag').innerHTML = `<i class="fa-solid ${meta.icon}"></i> ${meta.title}`;
+
+            showScreen('gameplayScreen');
+            renderCurrentQuestion();
+        }
+
+        function shuffleArray(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function renderCurrentQuestion() {
+            const q = gameState.currentQuestions[gameState.currentIndex];
+            const total = gameState.currentQuestions.length;
+
+            // Reset UI states
+            document.getElementById('feedbackBox').classList.add('hidden');
+            document.getElementById('streakBonusBadge').classList.add('hidden');
+
+            // Update Header Stats
+            document.getElementById('qIndexText').innerText = gameState.currentIndex + 1;
+            document.getElementById('qTotalText').innerText = total;
+            document.getElementById('liveScoreText').innerText = gameState.score;
+
+            const progressPct = ((gameState.currentIndex + 1) / total) * 100;
+            document.getElementById('gameProgressBar').style.width = progressPct + '%';
+
+            // Question category badge
+            document.getElementById('questionCategoryBadge').innerText = q.category || 'Tatabahasa SPM';
+
+            // Context / text snippet box
+            const contextBox = document.getElementById('questionContextBox');
+            if (q.context) {
+                contextBox.classList.remove('hidden');
+                contextBox.innerText = q.context;
+            } else {
+                contextBox.classList.add('hidden');
+            }
+
+            // Question Title
+            document.getElementById('questionTitle').innerText = q.title;
+
+            // Options Container
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = '';
+
+            const optionPrefixes = ['A', 'B', 'C', 'D'];
+            q.options.forEach((optText, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-card w-full p-4 rounded-2xl text-left font-medium text-slate-200 text-sm md:text-base flex items-start gap-3 transition cursor-pointer';
+                btn.onclick = () => selectAnswer(idx);
+                btn.innerHTML = `
+                    <span class="w-7 h-7 rounded-lg bg-slate-700 flex items-center justify-center font-bold text-xs text-blue-300 flex-shrink-0">${optionPrefixes[idx]}</span>
+                    <span class="mt-0.5 leading-snug">${optText}</span>
+                `;
+                container.appendChild(btn);
+            });
+        }
+
+        function selectAnswer(selectedIndex) {
+            const q = gameState.currentQuestions[gameState.currentIndex];
+            const isCorrect = (selectedIndex === q.answer);
+
+            // Disable all option buttons to prevent multiple clicks
+            const optionBtns = document.querySelectorAll('#optionsContainer button');
+            optionBtns.forEach((btn, idx) => {
+                btn.disabled = true;
+                btn.classList.remove('hover:border-blue-400');
+                if (idx === q.answer) {
+                    btn.classList.add('correct');
+                } else if (idx === selectedIndex && !isCorrect) {
+                    btn.classList.add('wrong');
+                }
+            });
+
+            let pointsEarned = 0;
+            if (isCorrect) {
+                pointsEarned = 10;
+                gameState.consecutiveCorrect++;
+                if (gameState.consecutiveCorrect > gameState.maxStreakInSession) {
+                    gameState.maxStreakInSession = gameState.consecutiveCorrect;
+                }
+
+                // Check for streak bonus (+5 XP if 3 or more consecutive)
+                if (gameState.consecutiveCorrect >= 3) {
+                    pointsEarned += 5;
+                    document.getElementById('streakBonusBadge').classList.remove('hidden');
+                }
+
+                gameState.score += pointsEarned;
+                playSoundEffect('correct');
+
+                // Mini Confetti burst for correct answer
+                if (typeof confetti === 'function') {
+                    confetti({ particleCount: 30, spread: 60, origin: { y: 0.7 } });
+                }
+            } else {
+                gameState.consecutiveCorrect = 0;
+                playSoundEffect('wrong');
+            }
+
+            // Save session history item
+            gameState.sessionHistory.push({
+                question: q,
+                userAnswerIndex: selectedIndex,
+                isCorrect: isCorrect,
+                points: pointsEarned
+            });
+
+            // Display Feedback Overlay
+            showFeedbackModal(isCorrect, q);
+        }
+
+        function showFeedbackModal(isCorrect, questionObj) {
+            const feedbackBox = document.getElementById('feedbackBox');
+            const icon = document.getElementById('feedbackIcon');
+            const title = document.getElementById('feedbackTitle');
+            const exp = document.getElementById('feedbackExplanation');
+
+            feedbackBox.classList.remove('hidden');
+
+            if (isCorrect) {
+                feedbackBox.style.borderColor = '#10b981';
+                icon.className = 'w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl font-bold';
+                icon.innerHTML = '<i class="fa-solid fa-check"></i>';
+                title.innerText = 'TAHNIAH! JAWAPAN ANDA BETUL!';
+                title.className = 'font-extrabold text-base md:text-lg text-emerald-400';
+            } else {
+                feedbackBox.style.borderColor = '#ef4444';
+                icon.className = 'w-10 h-10 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center text-xl font-bold';
+                icon.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+                title.innerText = 'BELUM TEPAT. CUBA FAHAMI PENERANGAN INI.';
+                title.className = 'font-extrabold text-base md:text-lg text-red-400';
+            }
+
+            const correctAnswerText = questionObj.options[questionObj.answer];
+            exp.innerHTML = `
+                <div class="mb-2 text-xs font-bold uppercase tracking-wide text-amber-300">
+                    <i class="fa-solid fa-key mr-1"></i> Jawapan Tepat: "${correctAnswerText}"
+                </div>
+                <p class="text-xs md:text-sm text-slate-200 leading-relaxed">${questionObj.explanation}</p>
+            `;
+        }
+
+        function nextQuestion() {
+            gameState.currentIndex++;
+            if (gameState.currentIndex < gameState.currentQuestions.length) {
+                renderCurrentQuestion();
+            } else {
+                finishGameSession();
+            }
+        }
+
+        function finishGameSession() {
+            // Update Cumulative Total XP
+            gameState.totalXP += gameState.score;
+
+            const totalQs = gameState.currentQuestions.length;
+            const correctCount = gameState.sessionHistory.filter(h => h.isCorrect).length;
+            const accuracyPct = Math.round((correctCount / totalQs) * 100);
+
+            // Grade Calculation
+            let gradeTitle = 'Master Tatabahasa!';
+            let gradeSub = 'Pencapaian cemerlang dalam persediaan SPM!';
+            let iconClass = 'fa-trophy';
+
+            if (accuracyPct >= 90) {
+                gradeTitle = 'Master Tatabahasa SPM!';
+                gradeSub = 'Syabas! Anda menguasai topik ini dengan sangat sempurna!';
+                iconClass = 'fa-crown text-amber-300';
+            } else if (accuracyPct >= 70) {
+                gradeTitle = 'Pakar Bahasa!';
+                gradeSub = 'Penguasaan yang baik! Sedikit lagi untuk menjadi Master.';
+                iconClass = 'fa-star text-blue-300';
+            } else if (accuracyPct >= 50) {
+                gradeTitle = 'Sedang Maju!';
+                gradeSub = 'Teruskan usaha anda! Ulang kaji nota ringkas untuk pemantapan.';
+                iconClass = 'fa-seedling text-emerald-300';
+            } else {
+                gradeTitle = 'Teruskan Berlatih!';
+                gradeSub = 'Jangan putus asa! Pengalaman latihan ini akan menjadikan anda lebih bijak.';
+                iconClass = 'fa-book-open text-purple-300';
+            }
+
+            document.getElementById('resultGradeTitle').innerText = gradeTitle;
+            document.getElementById('resultSubtitle').innerText = gradeSub;
+            document.getElementById('resultIcon').className = `fa-solid ${iconClass}`;
+            document.getElementById('resultScoreText').innerText = gameState.score + ' XP';
+            document.getElementById('resultAccuracyText').innerText = accuracyPct + '%';
+            document.getElementById('resultCorrectWrongText').innerText = `${correctCount} / ${totalQs - correctCount}`;
+            document.getElementById('resultMaxStreakText').innerText = gameState.maxStreakInSession;
+
+            // Check badges unlock
+            checkAndAwardBadges(correctCount, accuracyPct);
+
+            saveData();
+            updateTopUI();
+            showScreen('resultsScreen');
+
+            if (accuracyPct >= 80 && typeof confetti === 'function') {
+                confetti({ particleCount: 80, spread: 100, origin: { y: 0.5 } });
+            }
+        }
+
+        function checkAndAwardBadges(correctCount, accuracyPct) {
+            BADGES_DEFINITIONS.forEach(b => {
+                if (gameState.unlockedBadges.includes(b.id)) return; // Already unlocked
+
+                let unlock = false;
+                if (b.reqType === 'missionsCompleted') unlock = true;
+                if (b.reqType === 'totalXP' && gameState.totalXP >= b.reqVal) unlock = true;
+                if (b.reqType === 'perfectMission' && gameState.currentMissionKey === b.reqVal && accuracyPct === 100) unlock = true;
+                if (b.reqType === 'highScoreMission' && gameState.currentMissionKey === b.reqVal && gameState.score >= 80) unlock = true;
+                if (b.reqType === 'completedMission' && gameState.currentMissionKey === b.reqVal) unlock = true;
+
+                if (unlock) {
+                    gameState.unlockedBadges.push(b.id);
+                }
+            });
+            renderBadges();
+        }
+
+        function replayCurrentMission() {
+            startMissionGame(gameState.currentMissionKey);
+        }
+
+        function reviewAnswers() {
+            const container = document.getElementById('reviewListContainer');
+            container.innerHTML = '';
+
+            gameState.sessionHistory.forEach((hist, idx) => {
+                const q = hist.question;
+                const card = document.createElement('div');
+                card.className = `glass-card p-5 rounded-2xl border-l-4 space-y-3 ${hist.isCorrect ? 'border-l-emerald-500' : 'border-l-red-500'}`;
+
+                const prefixOptions = ['A', 'B', 'C', 'D'];
+                const userChoiceText = q.options[hist.userAnswerIndex];
+                const correctChoiceText = q.options[q.answer];
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between text-xs font-bold">
+                        <span class="text-slate-400">Soalan ${idx + 1} (${q.category})</span>
+                        <span class="${hist.isCorrect ? 'text-emerald-400' : 'text-red-400'} flex items-center gap-1">
+                            <i class="fa-solid ${hist.isCorrect ? 'fa-circle-check' : 'fa-circle-xmark'}"></i>
+                            ${hist.isCorrect ? 'BETUL (+10 XP)' : 'SALAH (0 XP)'}
+                        </span>
+                    </div>
+
+                    ${q.context ? `<div class="p-3 bg-slate-800/90 rounded-xl text-xs text-slate-300 italic border border-slate-700">${q.context}</div>` : ''}
+
+                    <h4 class="font-bold text-sm text-white">${q.title}</h4>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+                        <div class="p-2.5 rounded-xl ${hist.isCorrect ? 'bg-emerald-950/40 border border-emerald-500/40 text-emerald-300' : 'bg-red-950/40 border border-red-500/40 text-red-300'}">
+                            <strong>Jawapan Anda:</strong> ${prefixOptions[hist.userAnswerIndex]}. ${userChoiceText}
+                        </div>
+                        ${!hist.isCorrect ? `
+                            <div class="p-2.5 rounded-xl bg-emerald-950/40 border border-emerald-500/40 text-emerald-300">
+                                <strong>Jawapan Tepat:</strong> ${prefixOptions[q.answer]}. ${correctChoiceText}
+                            </div>
+                        ` : ''}
+                    </div>
+
+                    <div class="p-3 bg-slate-800/80 rounded-xl text-xs text-slate-300 leading-relaxed border border-slate-700">
+                        <strong class="text-amber-300 block mb-1">Penerangan Tatabahasa:</strong>
+                        ${q.explanation}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            showScreen('reviewScreen');
+        }
+
+        function renderGrammarGuideTabs(selectedMisiKey) {
+            const tabsNav = document.getElementById('guideTabsNav');
+            tabsNav.innerHTML = '';
+
+            GRAMMAR_NOTES.forEach(note => {
+                const btn = document.createElement('button');
+                const isActive = note.misiKey === selectedMisiKey;
+                btn.className = `px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition flex items-center gap-2 ${
+                    isActive ? 'bg-purple-600 text-white shadow-lg' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                }`;
+                btn.onclick = () => renderGrammarGuideTabs(note.misiKey);
+                btn.innerHTML = `<i class="fa-solid ${note.icon}"></i> ${note.title}`;
+                tabsNav.appendChild(btn);
+            });
+
+            const activeNote = GRAMMAR_NOTES.find(n => n.misiKey === selectedMisiKey) || GRAMMAR_NOTES[0];
+            const contentBox = document.getElementById('guideTabContent');
+            contentBox.innerHTML = `
+                <div>
+                    <h3 class="text-xl font-extrabold text-white flex items-center gap-2 mb-1">
+                        <i class="fa-solid ${activeNote.icon} text-purple-400"></i> ${activeNote.title}
+                    </h3>
+                    <p class="text-xs text-slate-300">${activeNote.summary}</p>
+                </div>
+                ${activeNote.contentHtml}
+            `;
+        }
+
+        function renderBadges() {
+            const container = document.getElementById('badgesGrid');
+            if (!container) return;
+            container.innerHTML = '';
+
+            BADGES_DEFINITIONS.forEach(b => {
+                const isUnlocked = gameState.unlockedBadges.includes(b.id);
+                const card = document.createElement('div');
+                card.className = `glass-card p-5 rounded-2xl flex items-center gap-4 transition ${isUnlocked ? 'border-amber-400/50' : 'badge-locked'}`;
+
+                card.innerHTML = `
+                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr ${b.color} flex items-center justify-center text-white text-2xl shadow-lg flex-shrink-0">
+                        <i class="fa-solid ${b.icon}"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h4 class="font-extrabold text-sm text-white">${b.title}</h4>
+                            ${isUnlocked ? '<span class="text-[10px] bg-amber-400/20 text-amber-300 font-bold px-2 py-0.5 rounded-full border border-amber-400/30">DIBUKA</span>' : '<span class="text-[10px] bg-slate-700 text-slate-400 px-2 py-0.5 rounded-full">TERKUNCI</span>'}
+                        </div>
+                        <p class="text-xs text-slate-300 mt-1 leading-relaxed">${b.desc}</p>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+    </script>
+</body>
+</html>
